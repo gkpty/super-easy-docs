@@ -1,7 +1,6 @@
 var fs = require("fs");
 
 module.exports = function AddSections(md, callback){
-  console.log('sections')
   //split the markdown file at the end of every line
   let mdarr = md.split(/(\r\n|\n|\r)/gm)
   let currentsection = "";
@@ -13,7 +12,6 @@ module.exports = function AddSections(md, callback){
     //replace subtitle
     else if(mdarr[i].startsWith('## ')){
       let id = mdarr[i].substr(3, 15).replace(/\s/g, '_').replace(`'`, '_').replace(',', '_').replace("(","").replace(")", '_') + i;
-      console.log(mdarr[i])
       AddSubsection(currentsection, id, mdarr[i].substr(3, mdarr[i].length));
     }
     if(i === mdarr.length-1){

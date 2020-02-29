@@ -15,10 +15,10 @@ module.exports = function createDocIndex(){
       }
       indexSection = `
       <div class="dropdown list-group-item p-0">
-        <button class="dropbtn" name="intro-dropdown">${sections[sect].text}
-          <i class="fa fa-caret-down"></i>
+        <button class="dropbtn" name="${sect}-dropdown">${sections[sect].text}
+          <i id="${sect}-dropdown-caret" class="fa fa-caret-down"></i>
         </button>
-        <div class="dropdown-content" id="intro-dropdown">
+        <div class="dropdown-content" id="${sect}-dropdown">
           ${subsectionBody}
         </div>
       </div>
@@ -35,6 +35,5 @@ module.exports = function createDocIndex(){
     </div>
   </div>
   `;
-  console.log(docIndex);
   return docIndex;
 }
