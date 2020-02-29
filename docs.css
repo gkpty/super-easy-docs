@@ -2,13 +2,6 @@ body {
   overflow-x: hidden;
 }
 
-br {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
-
 @media(max-width: 800px){
   .mobibar {
     padding: 10%;
@@ -36,6 +29,10 @@ br {
     border-right: 1px solid #cccccc;
     padding-top: 8%;
   }
+}
+
+.docs{
+  padding-top: 100px;
 }
 
 .dropdown {
@@ -71,12 +68,12 @@ span, i {
 
 .fa-caret-down{
   transform: rotate(0deg);
-  transition: transform 0.2s linear;
+  transition: transform 0.1s linear;
 }
 
 .fa-caret-down.open{
   transform: rotate(-90deg);
-  transition: transform 0.2s linear;
+  transition: transform 0.1s linear;
 }
 
 .dropdown-content a {
@@ -116,54 +113,9 @@ html,body {
   padding: 0px;
   font-family: 'Open Sans', sans-serif;
   text-align: left !important;
-  }
-  
-  h1, h2, h3, h4, h5 {
-    font-family: 'Roboto Mono', monospace;
-  }
-  .nav-link {
-    font-family: 'Roboto Mono', monospace;
-  }
-  .section-title {
-    padding-bottom: 5%;
-    font-size: 2rem;
-  }
-  .title {
-    font-size: 2rem;
-  }
-  section, header {
-    overflow-x: hidden;
-  }
-  header {
-    padding-bottom: 4%;
-  }
-  .section {
-    padding-top: 5%;
-    padding-bottom: 8%;
-  }
-  .nav-link{
-    color: #000 !important;
-  }
-  
-  @media(min-width: 900px) {
-    .container-2x{
-      padding-right: 100px !important;
-      padding-left: 100px !important;
-    }
-    .navbar-expand-lg .navbar-nav .nav-link {
-      padding-right: 1.5rem;
-      padding-left: 1.5rem;
-    }
-    .docs{
-      padding-top: 8rem;
-    }
-  }
-  .tech-icon {
-    max-width: 140px;
-    max-height: 100px
-  }
-  .badge{
-    padding: .25em .4em;
-    font-size: 50%;
-    vertical-align: middle;
-  }
+}
+
+section, h2 {
+  padding-top: 65px;
+  margin-top: -60px;
+}
