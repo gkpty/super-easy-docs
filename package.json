@@ -1,0 +1,31 @@
+{
+  "name": "super-easy-docs",
+  "version": "1.0.0",
+  "description": "A node module that generates responsive html documentation pages",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "easy-md-to-html": "^1.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gkpty/super-easy-docs.git"
+  },
+  "keywords": [
+    "documentation",
+    "markdown",
+    "html"
+  ],
+  "author": "gkpty",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gkpty/super-easy-docs/issues"
+  },
+  "homepage": "https://github.com/gkpty/super-easy-docs#readme"
+}
