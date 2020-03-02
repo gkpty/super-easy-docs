@@ -1,6 +1,6 @@
 {
   "name": "super-easy-docs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A node module that generates responsive html documentation pages",
   "main": "index.js",
   "directories": {
