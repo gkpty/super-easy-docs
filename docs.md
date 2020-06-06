@@ -348,7 +348,7 @@ this will be replaced by:
       <img src="img/arjan-logo.png" class="img-fluid">
     </picture>
 
-     
+
 ## CLI
 
     USAGE
@@ -551,9 +551,14 @@ Generally static sites in the cloud consist of an object storage solution (i.e. 
 **https**: creates a digital certificate for your domain with AWS ACM. If you have a route53 DNS it will automatically verify your certificate. Else you must manually verify your certificate with your DNS provider. 
 **www**: a reroute bucket for www
 
-
 ## Usage
+1. go to your project's directory `cd your_project`
+2. run `arjan init PROFILE REGION`
+3. If you want your site to be online while still in development you can run `arjan deploy DOMAIN create`
+4. Then to update your stack to production you can run `arjan deploy DOMAIN update prod` this will add a route53 DNS, a cloudfront distribution and a verified SSL ceritifcate to your stack.
+5. alternatively you can just run `arjan deploy DOMAIN create prod` from the start.
 
+In order to deploy a production site you must have already purchased a domain from a domain name registrar and you should have their respective interface open in order to create DNS records or transfer nameservers. there are several popular options out there; we like to use namecheap because as the name suggests it, its cheap, and it also has great service.
 
 ## Programmatic Usage
 
@@ -597,32 +602,225 @@ You can check out the following links to learn how to reroute requests in major 
 
 
 # CLI
-## commands
 
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/arjancli.svg)](https://npmjs.org/package/arjancli)
+[![Downloads/week](https://img.shields.io/npm/dw/arjancli.svg)](https://npmjs.org/package/arjancli)
+[![License](https://img.shields.io/npm/l/arjancli.svg)](https://github.com/arjan-tools/cli/blob/master/package.json)
 
-    USAGE
-      $ arjan localize FILENAME FROM [TO]
-    
-    ARGUMENTS
-      FILENAME  [default: all] name of the file you want to translate -only html files accepted. Use all to translate all of
-                your html files (default).
-    
-      FROM      origin language of the file
-    
-      TO        desired translation language
-    
-    OPTIONS
-      -b, --backwards  Update JSON locale accoridng to changes made in the HTML file. Must be used together with the update
-                       flag.
-    
-      -c, --create     Create locales for your html website. if a destination language isnt provided it wont be translated.
-    
-      -e, --export     Creates a CSV file for your JSON locale.
-    
-      -i, --import     Update JSON locale from changes made in the CSV file
-    
-      -u, --update     Update HTML file accoridng to changes made in the JSON locale.
+```
+sh-session
+$ npm install -g arjan-cli
+$ arjan COMMAND
+running command...
+$ arjan (-v|--version|version)
+arjan-cli/0.1.0 linux-x64 node-v12.13.1
+$ arjan --help [COMMAND]
+USAGE
+  $ arjan COMMAND
+...
+```
 
+## Commands
+
+* [`arjan audit`](#arjan-audit)
+* [`arjan deploy SITE ACTION [SETUP]`](#arjan-deploy-site-action-setup)
+* [`arjan help [COMMAND]`](#arjan-help-command)
+* [`arjan init [REGION] [PROFILE]`](#arjan-init-region-profile)
+* [`arjan localize LANGUAGE [FILES]`](#arjan-localize-language-files)
+* [`arjan optimize [FILENAME]`](#arjan-optimize-filename)
+* [`arjan upload`](#arjan-upload)
+
+## arjan audit
+
+Describe the command here
+
+```
+USAGE
+  $ arjan audit
+
+OPTIONS
+  -d, --dir=dir              Directory path to serve. default is root (relative to the path in which you run the
+                             command)
+
+  -f, --file=file            Path of the page you want to audit. default is index.html
+
+  -p, --port=port            Port used for the test server. Default is 8080.
+
+  -t, --threshold=threshold  Integer value from 0 to 1 that represents what you consider to be an acceptable lighthouse
+                             score for your site. Its very similar to what you would consider an acceptable school test
+                             grade.
+
+DESCRIPTION
+  ...
+  Extra documentation goes here
+```
+
+_See code: [src/commands/audit.js](https://github.com/arjan-tools/cli/blob/v0.1.0/src/commands/audit.js)_
+
+## arjan deploy SITE ACTION [SETUP]
+
+Describe the command here
+
+```
+USAGE
+  $ arjan deploy SITE ACTION [SETUP]
+
+ARGUMENTS
+  SITE    name of the site i.e. yoursite.com
+
+  ACTION  (create|update|import|delete|upload) choose an action to perform. you can create, update, import your stack or
+          upload files to your bucket.
+
+  SETUP   (dev|test|prod|custom) [default: dev] setup for the site - dev, test, production or custom
+
+OPTIONS
+  -c, --cdn            creates a CloudFront distribution for your site.
+  -e, --error=error    [default: error.html] name of the error document
+
+  -h, --https          creates and validates a TLS certificate for your site. If you arent using a route53 DNS you must
+                       create a CNAME record manually in your DNS.
+
+  -i, --index=index    [default: index.html] name of the index document. default is index.html
+
+  -r, --route53        creates a Hosted Zone in route 53. Have your current DNS provider page open and ready to add a
+                       custom DNS.
+
+  -u, --upload=upload  name of a specific file you want to upload to your site. all uploads all of the files
+
+  -w, --www            creates a www s3 bucket that reroutes requests to the index.
+
+DESCRIPTION
+  ...
+  Extra documentation goes here
+```
+
+_See code: [src/commands/deploy.js](https://github.com/arjan-tools/cli/blob/v0.1.0/src/commands/deploy.js)_
+
+## arjan help [COMMAND]
+
+display help for arjan
+
+```
+USAGE
+  $ arjan help [COMMAND]
+
+ARGUMENTS
+  COMMAND  command to show help for
+
+OPTIONS
+  --all  see all commands in CLI
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.0.1/src/commands/help.ts)_
+
+## arjan init [REGION] [PROFILE]
+
+Describe the command here
+
+```
+USAGE
+  $ arjan init [REGION] [PROFILE]
+
+ARGUMENTS
+  REGION   [default: us-east-1] AWS Region
+  PROFILE  [default: default] AWS Profile
+
+OPTIONS
+  -a, --audit     builds required files/dirs for arjan audit
+  -d, --deploy    builds required files/dirs for arjan deploy
+  -l, --localize  builds required files/dirs for arjan localize
+  -o, --optimize  builds required files/dirs for arjan optimize
+
+DESCRIPTION
+  ...
+  Extra documentation goes here
+```
+
+_See code: [src/commands/init.js](https://github.com/arjan-tools/cli/blob/v0.1.0/src/commands/init.js)_
+
+## arjan localize LANGUAGE [FILES]
+
+Describe the command here
+
+```
+USAGE
+  $ arjan localize LANGUAGE [FILES]
+
+ARGUMENTS
+  LANGUAGE  origin language of the file/s.
+
+  FILES     name of the file you want to translate -only html files accepted. Use all to translate all of your html
+            files (default).
+
+OPTIONS
+  -b, --backwards            Update JSON locale accoridng to changes made in the HTML file. Must be used together with
+                             the update flag.
+
+  -c, --create               Create locale/s for your site. When used with translate flags, it generates a translated
+                             version of the locale and the HTML.
+
+  -e, --export               Creates a CSV file for your JSON locale.
+
+  -i, --import               Update JSON locale from changes made in the CSV file
+
+  -t, --translate=translate  desired translation language. You may apply this flag multiple times to translate into
+                             multiple languages.
+
+  -u, --update               Update HTML file accoridng to changes made in the JSON locale.
+
+DESCRIPTION
+  ...
+  Extra documentation goes here
+```
+
+_See code: [src/commands/localize.js](https://github.com/arjan-tools/cli/blob/v0.1.0/src/commands/localize.js)_
+
+## arjan optimize [FILENAME]
+
+Describe the command here
+
+```
+USAGE
+  $ arjan optimize [FILENAME]
+
+ARGUMENTS
+  FILENAME  name of the file i.e. index.html
+
+OPTIONS
+  -c, --css     minifiy css using cssnano
+  -h, --html    compress html using html-minifier
+  -i, --images  compress images and if possible maintain the format. otherwise its converted to png.
+  -j, --js      minify js using uglify js
+
+  -w, --webp    saves a webp version of each image, then replaces each image instance in the html files with a picture
+                tag.
+
+DESCRIPTION
+  ...
+  Extra documentation goes here
+```
+
+_See code: [src/commands/optimize.js](https://github.com/arjan-tools/cli/blob/v0.1.0/src/commands/optimize.js)_
+
+## arjan upload
+
+Describe the command here
+
+```
+USAGE
+  $ arjan upload
+
+OPTIONS
+  -n, --name=name  name to print
+
+DESCRIPTION
+  ...
+  Extra documentation goes here
+```
+
+_See code: [src/commands/upload.js](https://github.com/arjan-tools/cli/blob/v0.1.0/src/commands/upload.js)_
+<!-- commandsstop -->
 
 
 # API
@@ -633,300 +831,298 @@ You can check out the following links to learn how to reroute requests in major 
 - **Description:** Writes a directory only if it didnt previously exist.
 - **params:(dir)**
     - **dir:** string: name of the directory to build.
-    - **returns:** Promise(resolve, reject)
-        - **resolve:** boolean: true
-        - **reject:** error
-    
+- **returns:** Promise(resolve, reject)
+    - **resolve:** boolean: true
+    - **reject:** error
+ 
 **createFile(file, contents)**
-  - **Description:** Writes a file only if the file didn't previously exist.
-  - **params:(file, contents)**
+- **Description:** Writes a file only if the file didn't previously exist.
+- **params:(file, contents)**
     - **filePath:** string: path of the file
     - **contents:** string: contents of the file as a string.
-  - **returns:** Promise(resolve, reject)
+- **returns:** Promise(resolve, reject)
     - **resolve:** string: contents of the file
     - **reject:** error
 
 **initBuild(region, profile)**
-  - **Description:** builds some required directories and files in your project.
-  - **params**:**(region, profile)**
-      - **region**: string: desired AWS region
-      - **profile**: string: local AWS profile
-  - **returns**: Promise(resolve, reject)
-      - **resolve**: string: ‘built’
-      - **reject**: error
+- **Description:** builds some required directories and files in your project.
+- **params**:**(region, profile)**
+    - **region**: string: desired AWS region
+    - **profile**: string: local AWS profile
+- **returns**: Promise(resolve, reject)
+    - **resolve**: string: ‘built’
+    - **reject**: error
 
 ## Arjan Localize
 
 **CreateLocale(html)**  
-**Description:** Parses the HTML of the input file; then for all elements that contain text it adds an ID. Then it generates or re-writes a JSON file that contains ids and the text values.
-**Params: (html)**  
-**html:** string: HTML content to parse.
-**returns:** Promise(resolve, reject)
-**resolve: ({size:size, locale:locale, html:html1})**
-**size:**  int: number of items in the locale
-**locale:** string: JSON string with the locale.
-**html:** string: Modified HTML containing the necessary ID’s
-**reject:** error
+- **Description:** Parses the HTML of the input file; then for all elements that contain text it adds an ID. Then it generates or re-writes a JSON file that contains ids and the text values.
+- **Params: (html)**
+    - **html:** string: HTML content to parse.
+- **returns:** Promise(resolve, reject)
+    - **resolve: ({size:size, locale:locale, html:html1})**
+        - **size:**  int: number of items in the locale
+        - **locale:** string: JSON string with the locale.
+        - **html:** string: Modified HTML containing the necessary ID’s
+    - **reject:** error
 
 **TranslateLocale(input, from, to, size)**
-**Description:** Translates each value using amazon translate then generates or re-writes a JSON file that contains ids and translated values. 
-**params: (input, from, to, size)**
-    **input**: string: Locale to parse
-    **language**: string: Approporiate lanugage code for the input locale’s language.
-    **translation**: string: Appropriate lanugage code for the desired output language
-    **size**: int
-**returns**: Promise(resolve, reject)
-    **resolve**: translation: string
-    **reject**: error
+- **Description:** Translates each value using amazon translate then generates or re-writes a JSON file that contains ids and translated values. 
+- **params: (input, from, to, size)**
+    - **input:** string: Locale to parse
+    - **language:** string: Approporiate lanugage code for the input locale’s language.
+    - **translation:** string: Appropriate lanugage code for the desired output language
+    - **size:** int
+- **returns:** Promise(resolve, reject)
+    - **resolve:** translation: string
+    - **reject:** error
 
 **TranslateHtml(html, json)**
-**description**: Replace text content in an HTML document according to the values in the provided JSON locale.
-**params:(html, json)**
-    **html**: string: html string to parse.
-    **json**: string: JSON string containing text values for the html (in the translated language).
-**returns**: Promise(resolve, reject)
-    **resolve**: string: The translated html file
-    **reject**: error   
+- **description:** Replace text content in an HTML document according to the values in the provided JSON locale.
+- **params:(html, json)**
+    - **html:** string: html string to parse.
+    - **json:** string: JSON string containing text values for the html (in the translated language).
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: The translated html file
+    - **reject:** error   
 
 **jsonToCsv(lang, obj)**
-description: converts a JSON locale into a CSV.
-**params:(lang, obj)**
-    **lang**: string: Approproate language code for the language of the file.
-    **obj**: string: Properly formatted JSON locale as a string.
-**returns**: Promise(resolve, reject)
-    **resolve**: csv: string: a string with the output CSV
-    **reject**: error
+- **description:** converts a JSON locale into a CSV.
+- **params:(lang, obj)**
+    - **lang:** string: Approproate language code for the language of the file.
+    - **obj:** string: Properly formatted JSON locale as a string.
+- **returns:** Promise(resolve, reject)
+    - **resolve:** csv: string: a string with the output CSV
+    - **reject:** error
     
 **csvToJson(lang, csv)**
-**description**: reads a CSV file and converts it to JSON
-**params: (lang, csv)**
-    **lang**: string: Approproate language code for the language of the file
-    **csv**: string: a string formatted in CSV.
-**returns**: Promise(resolve, reject)
-    **resolve**: string: a string with the JSON object.
-    **reject**: error
+- **description:** reads a CSV file and converts it to JSON
+- **params: (lang, csv)**
+    - **lang:** string: Approproate language code for the language of the file
+    - **csv:** string: a string formatted in CSV.
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: a string with the JSON object.
+    - **reject:** error
 
 ## Arjan Optimize
 
 **copyFile(filename, output)**
-**Description:** Copy a file into another directory.
-**params**: **(filename, output)**
-    **filename**: string: Path of the file
-    **outputDir**: string: the output directory in which you want to save the file
-**returns**: Promise(resolve, reject)
-    **resolve**: string: path of the file
-    **reject**: error
+- **Description:** Copy a file into another directory.
+- **params:** **(filename, output)**
+    - **filename:** string: Path of the file
+    - **outputDir:** string: the output directory in which you want to save the file
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: path of the file
+    - **reject:** error
     
 **scanFolder(currentDirPath, outputDir, ignorePaths, callback)**
-**description**: Recursively scans folder and creates arrays that contain the filepaths for each MIME type.
-**params**: **(currentDirPath, outputDir, ignorePaths, callback)** 
-    **currentDirPath**: string: Path of the current directory
+- **description:** Recursively scans folder and creates arrays that contain the filepaths for each MIME type.
+- **params:** **(currentDirPath, outputDir, ignorePaths, callback)** 
+    - **currentDirPath:** string: Path of the current directory
     contents: string
-    **outputDir**: string: output directory in which to copy the file to.
-    **ignorePaths**: Object: a json object that contains filepaths to ignore as values and true|false as values.
-    **callback**: **(filePath, stat)**
+    - **outputDir:** string: output directory in which to copy the file to.
+    - **ignorePaths:** Object: a json object that contains filepaths to ignore as values and true|false as values.
+    - **callback:** **(filePath, stat)**
     
 **compressImages(filePath, output, imageArr, svgoConfig)**
-**description**: Compresses an image according to its MIME type. Uses Sharp to compress most image formats and uses SVGO to minimize svgs.
-**params:(filePath, output, imageArr, svgoConfig)**
-    **filePath**: string: Path of the image
-    **output:** string: desired directory in which to save the compressed image
-    **imageArr**: array: contains paths of images being compressed
-    **svgoConfig:** Object: object with the options for svgo.
-
-**returns**: Promise(resolve, reject)
-    **resolve**:  int: size of image in bytes
-    **reject**: error
+- **description:** Compresses an image according to its MIME type. Uses Sharp to compress most image formats and uses SVGO to minimize svgs.
+- **params:(filePath, output, imageArr, svgoConfig)**
+    - **filePath:** string: Path of the image
+    - **output:** string: desired directory in which to save the compressed image
+    - **imageArr:** array: contains paths of images being compressed
+    - **svgoConfig:** Object: object with the options for svgo.
+- **returns:** Promise(resolve, reject)
+    - **resolve:**  int: size of image in bytes
+    - **reject:** error
     
 **compressWebp(filePath, outputDir)**
-**description**: Converts an image into webp using sharp. 
-**params: (filePath, outputDir)**
-    **filePath**: string: Path of the image
-    **outputDir**: string: desired output directory in which to save the compressed image.
-**returns**: Promise(resolve, reject)
-    **resolve**: int: size of image in bytes
-    **reject**: error
+- **description:** Converts an image into webp using sharp. 
+- **params: (filePath, outputDir)**
+    - **filePath:** string: Path of the image
+    - **outputDir:** string: desired output directory in which to save the compressed image.
+- **returns:** Promise(resolve, reject)
+    - **resolve:** int: size of image in bytes
+    - **reject:** error
     
 **replaceWebp(imgPath, html)**
-**description**: Parses your html document and replaces all img tags referencing the imagePath with a picture tag that contains the webp and regular/compressed versions of the image.
-**params: (imgPath, html)**
-    **imgPath**: string: path of the image
-    **html**: string: html string in which you want to find and replace the image.
-
-**return**: Promise(resolve, reject)
-    **resolve**: int: size of image in bytes
-    **reject**: error
+- **description:** Parses your html document and replaces all img tags referencing the imagePath with a picture tag that contains the webp and regular/compressed versions of the image.
+- **params: (imgPath, html)**
+    - **imgPath:** string: path of the image
+    - **html:** string: html string in which you want to find and replace the image.
+- **return:** Promise(resolve, reject)
+    - **resolve:** int: size of image in bytes
+    - **reject:** error
     
 ## Arjan Audit
 
 **runAudit(dir, index, port, threshold)**
-**description**: starts a simple local static server with express, runs a lighthouse audit using lighthouse 6. Then it returns a JSON object with lighthouse scores + audit report details and exits the local server.
-**params: (dir, index, port, threshold)**
-     **dir**: string: desired direcotry to serve e.g. dep_pack
+- **description:** starts a simple local static server with express, runs a lighthouse audit using lighthouse 6. Then it returns a JSON object with lighthouse scores + audit report details and exits the local server.
+- **params: (dir, index, port, threshold)**
+    - **dir:** string: desired direcotry to serve e.g. dep_pack
     index: string: path of the file you want to audit; typically index.html.
-     **port**: int: desired port number to use in the audit.
-    **threshold**: float: number between 0 and 1. something bellow the threshold is considered a bad score. e.g. if you are a B student your threshold would be .8
-**returns**: Promise(resolve, reject)
-    **resolve**: string: formatted
-    **reject**: error
+    - **port:** int: desired port number to use in the audit.
+    - **threshold:** float: number between 0 and 1. something bellow the threshold is considered a bad score. e.g. if you are a B student your threshold would be .8
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: formatted
+    - **reject:** error
 
 ## Arjan Deploy
 
 **generateTemplate(domainName, index, error, www, cdn, route53, https)**
-**description**: Generates a JSON cloudFormation template for your stack.
-**params: (domainName, index, error, www, cdn, route53, https)**
-    **domainName**: string: domain name of your site i.e. yoursite.com
-    **index**: string: Index document for your site i.e. index.html
-    **error**: string: error document for your site i.e. error.html
-    **www**: boolean: option to add re route  bucket from www to root 
-    **cdn**: boolean: option to add a Cloudfront distribuition to your stack
-    **route53**: boolean: option to add a Domain Name System DNS
-    **https**: boolean: option to add a digital certificate 
-**returns**: Promise(resolve, error)
-    **resolve({"template":template, "existingResources": ResourcesToImport})**
-        **template**: string: stringified JSON cloudformation template
-        **existingResources**: Array: An array containing existing AWS resources that are included in the template.
-    **reject**: error
+- **description:** Generates a JSON cloudFormation template for your stack.
+- **params: (domainName, index, error, www, cdn, route53, https)**
+    - **domainName:** string: domain name of your site i.e. yoursite.com
+    - **index:** string: Index document for your site i.e. index.html
+    - **error:** string: error document for your site i.e. error.html
+    - **www:** boolean: option to add re route  bucket from www to root 
+    - **cdn:** boolean: option to add a Cloudfront distribuition to your stack
+    - **route53:** boolean: option to add a Domain Name System DNS
+    - **https:** boolean: option to add a digital certificate 
+- **returns:** Promise(resolve, error)
+    - **resolve({"template":template, "existingResources": ResourcesToImport})**
+        - **template:** string: stringified JSON cloudformation template
+        - **existingResources:** Array: An array containing existing AWS resources that are included in the template.
+    - **reject:** error
     
 **deployStack(domainName, template, existingResources, importAction)**
-**description**: Creates  a cloudformation changeset and executes it.
-**params: (domainName, template, existingResources, importAction)**
-    **domainName**: string: Domain name of your site i.e. yoursite.com
-    **template**: string: stringified JSON cloudformation template
-    **existingResources**: Array: An array containing existing AWS resources that you want to import into your stack (resourcesToImport).
-    **importAction**: boolean: true|false. True if you want to execute an import. false if you want to execute a create|update.
-**returns**: Promise(resolve, error)
-    **resolve({stackName:stackName, changeSetName:changeSet.name, action:changeSet.action})**
-        **name**: string: Name of the cloudformation stack
-        **changeSet**: string: Name of the changeset
-        **action**: string: action to execute in cloudformation. options include: create|update|delete.
-    **reject**: error
+- **description:** Creates  a cloudformation changeset and executes it.
+- **params: (domainName, template, existingResources, importAction)**
+    - **domainName:** string: Domain name of your site i.e. yoursite.com
+    - **template:** string: stringified JSON cloudformation template
+    - **existingResources:** Array: An array containing existing AWS resources that you want to import into your stack (resourcesToImport).
+    - **importAction:** boolean: true|false. True if you want to execute an import. false if you want to execute a create|update.
+- **returns:** Promise(resolve, error)
+    - **resolve({stackName:stackName, changeSetName:changeSet.name, action:changeSet.action})**
+        - **name:** string: Name of the cloudformation stack
+        - **changeSet:** string: Name of the changeset
+        - **action:** string: action to execute in cloudformation. options include: create|update|delete.
+    - **reject:** error
     
 **createChangeSet(stackName, template, existingResources, importAction)**
-**description**: Creates a changeset in AWS cloudformation.
-**params: (stackName, template, existingResources, importAction)**
-    **stackName**: string: Name of the cloudformation stack
-    **template**: string: stringified JSON cloudformation template
-    **existingResources**: Array: An array containing existing AWS resources that you want to import into your stack (resourcesToImport).
-    **importAction**: boolean: true|false: true if you want to execute an import. false if you want to execute a create|update.
-    **returns**: Promise(resolve, reject)
-        **resolve: ({changeSetName:changeSetName, action:action})**
-            **name**: string: Name of the changeset
-            **action**: string: action to execute in cloudformation. options include: create|update|delete.
-        **reject**: error
+- **description:** Creates a changeset in AWS cloudformation.
+- **params: (stackName, template, existingResources, importAction)**
+    - **stackName:** string: Name of the cloudformation stack
+    - **template:** string: stringified JSON cloudformation template
+    - **existingResources:** Array: An array containing existing AWS resources that you want to import into your stack (resourcesToImport).
+    - **importAction:** boolean: true|false: true if you want to execute an import. false if you want to execute a create|update.
+    - **returns:** Promise(resolve, reject)
+        - **resolve({changeSetName:changeSetName, action:action})**
+            - **name:** string: Name of the changeset
+            - **action:** string: action to execute in cloudformation. options include: create|update|delete.
+        - **reject:** error
     
 **requestCertificate(domainName)**
-**description**: requests an ACM certificate.
-**params: (domainName)**
-    **domainName**: string: domain of your site i.e. yoursite.com
-**returns**: Promise(resolve, reject)
-    **resolve**: string: ARN of the ACM certficate
-    **reject**: error    
+- **description:** requests an ACM certificate.
+- **params: (domainName)**
+    - **domainName:** string: domain of your site i.e. yoursite.com
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: ARN of the ACM certficate
+    - **reject:** error    
 
 **describeCertificate**
-**description**: gets the CNAME records required to verifiy the ACM certificate.
-**params: (certificateArn)**
-    **certificateArn**: string: ARN (amazon resource number) for the ACM certificate.
-**returns: Promise(resolve, reject)**
-    **resolve**: ({"cName": cName, "cValue": cValue})
-        **cName**: string: name of the CNAME record
-        **cValue**: string: value of the CNAME record
-    **reject**: error
+- **description:** gets the CNAME records required to verifiy the ACM certificate.
+- **params: (certificateArn)**
+    - **certificateArn:** string: ARN (amazon resource number) for the ACM certificate.
+- **returns: Promise(resolve, reject)**
+    - **resolve:** ({"cName": cName, "cValue": cValue})
+        - **cName:** string: name of the CNAME record
+        - **cValue:** string: value of the CNAME record
+    - **reject:** error
     
 **validateCertificate**
-**description**: validates an ACM certificate by creating the required records in route53.
-**params: (cName, cValue, stackName)**
-    **cName**: string: name of the CNAME record
-    **cValue**: string: value of the CNAME record
-    **stackName**: string: name of the CloudFormation stack
-**returns: Promise(resolve, reject)**
-    **resolve**:  string: “record for certificate created”
-    **reject**: error
+- **description:** validates an ACM certificate by creating the required records in route53.
+- **params: (cName, cValue, stackName)**
+    - **cName:** string: name of the CNAME record
+    - **cValue:** string: value of the CNAME record
+    - **stackName:** string: name of the CloudFormation stack
+- **returns: Promise(resolve, reject)**
+    - **resolve:**  string: “record for certificate created”
+    - **reject:** error
     
 **createCertificate**
-**description**: requests and validate an ACM certificate
-**params: (domainName, stackName, route53)**
-    **domainName**: string
-    **stackName**: string
-    **route53**: boolean
-**returns**: Promise(resolve, reject)
-    **resolve**: arn: string
-    **reject**: error
+- **description:** requests and validate an ACM certificate
+- **params: (domainName, stackName, route53)**
+    - **domainName:** string
+    - **stackName:** string
+    - **route53:** boolean
+- **returns:** Promise(resolve, reject)
+    - **resolve:** arn: string
+    - **reject:** error
     
 **importCertificate(domain, template, existingResources, https, route53, certArn)**
-**description**: import an ACM certificate into your stack.
-**params: (domain, template, existingResources, https, route53, certArn)**
-    **domain**: string: domain of your site i.e. yoursite.com
-    **template**: string
-    **existingResources**: string
-    **https**: string
-    **route53**: string
-    **certArn**: string
-**returns**: Promise(resolve, reject)
-    **resolve**: string: existingResources
-    **reject**: error
+- **description:** import an ACM certificate into your stack.
+- **params: (domain, template, existingResources, https, route53, certArn)**
+    - **domain:** string: domain of your site i.e. yoursite.com
+    - **template:** string
+    - **existingResources:** string
+    - **https:** string
+    - **route53:** string
+    - **certArn:** string
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: existingResources
+    - **reject:** error
     
 **stackExists(stackName)**
-**description**: check if a given cloudFormation stack exists. if the stack doesnt exist, the promise resolves with a null value.
-**params: (stackName)**
-    **stackName**: string: name of the stack
-**returns**: Promise(resolve, reject)
-    **resolve**: string: id of the cloudformation stack or null
-    **reject**: error
+- **description:** check if a given cloudFormation stack exists. if the stack doesnt exist, the promise resolves with a null value.
+- **params: (stackName)**
+    - **stackName:** string: name of the stack
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: id of the cloudformation stack or null
+    - **reject:** error
     
 **bucketExists(domainName)**
-**description**: check if a given bucket exists.
-**params: (domainName)**
-    **domainName**: string: domain of your site i.e. yoursite.com
-**returns**: Promise(resolve, reject)
-    **resolve**: boolean: true|false
-    **reject**: error
+- **description:** check if a given bucket exists.
+- **params: (domainName)**
+    - **domainName:** string: domain of your site i.e. yoursite.com
+- **returns:** Promise(resolve, reject)
+    - **resolve:** boolean: true|false
+    - **reject:** error
     
 **distributionExists**
-**description**: check if a cloudFormation distribution exists for a given domain. if it doesnt exist, the promise resolves a null.
-**params: (domainName)**
-    **domainName**: string: domain of your site i.e. yoursite.com
-**returns**: Promise(resolve, reject)
-    **resolve**: obj: {"id":cloudfront_dist_id, "domainName":domain}
-    **reject**: error
+- **description:** check if a cloudFormation distribution exists for a given domain. if it doesnt exist, the promise resolves a null.
+- **params: (domainName)**
+    - **domainName:** string: domain of your site i.e. yoursite.com
+- **returns:** Promise(resolve, reject)
+    - **resolve:** obj: {"id":cloudfront_dist_id, "domainName":domain}
+    - **reject:** error
     
 **certificateExists(domainName)**
-**description**: check if an ACM certificate exists for a given domain.
-**params: (domainName)**
-    **domainName**: string: your sites domain i.e. yoursite.com
-**returns**: Promise(resolve, reject)
-    **resolve**: string: ARN of the ACM certificate
-    **reject**: error
+- **description:** check if an ACM certificate exists for a given domain.
+- **params: (domainName)**
+    - **domainName:** string: your sites domain i.e. yoursite.com
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: ARN of the ACM certificate
+    - **reject:** error
     
 **hostedZoneExists(domainName)**
-**description**: check if a hosted zone exists for a given domain.
-**params: (domainName)**
-    **domainName**: string: domain of your site i.e. yoursite.com
-**returns**: Promise(resolve, reject)
-    **resolve**: string: Id of the hosted zone
-    **reject**: error
+- **description:** check if a hosted zone exists for a given domain.
+- **params: (domainName)**
+    - **domainName:** string: domain of your site i.e. yoursite.com
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string: Id of the hosted zone
+    - **reject:** error
     
 **newHostedZone(stackName)**
-**description**: returns the 4 nameservers for the hostedzone associated to a given stack.
-**params: (stackName)**
-    **stackName**: string: name of the cloudformation stack.
-**returns**: Promise(resolve, reject)
-    **resolve**: array: string: nameservers
-    **reject**: error
+- **description:** returns the 4 nameservers for the hostedzone associated to a given stack.
+- **params: (stackName)**
+    - **stackName:** string: name of the cloudformation stack.
+- **returns:** Promise(resolve, reject)
+    - **resolve:** array: string: nameservers
+    - **reject:** error
 
 **DeleteSite(stackName)**
-**description**: deletes a cloudformation stack
-**params**: (stackName)
-    **stackName**: string
-**returns**: Promise(resolve, reject)
-    **resolve**: string:  stackName + ' cloudFormation Stack is being deleted.’
-    **reject**: error
+- **description:** deletes a cloudformation stack
+- **params:** (stackName)
+    - **stackName:** string
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string:  stackName + ' cloudFormation Stack is being deleted.’
+    - **reject:** error
 
 **deleteCertificate(domain)**
-**description**: deletes ACM certificates and existing route53 records for a given certificate.
-**params**: (domain)
-    **domain**: string: domain of the site
-**returns**: Promise(resolve, reject)
-    **resolve**: string:  stackName + ' cloudFormation Stack is being deleted.’
-    **reject**: error
+- **description:** deletes ACM certificates and existing route53 records for a given certificate.
+- **params:** (domain)
+    - **domain:** string: domain of the site
+- **returns:** Promise(resolve, reject)
+    - **resolve:** string:  stackName + ' cloudFormation Stack is being deleted.’
+    - **reject:** error
 
