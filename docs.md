@@ -533,10 +533,6 @@ Google recently recalculated the score of what they consdier a healthy fats site
 
 Arjan deploy is a tool that helps you deploy static websites to the AWS cloud using Cloudformation. The tool is modular and can be used with the Arjan CLI, or programmatically in your own node.js project. Arjan Deploy gives you several different options to deploy your static sites in AWS and it also helps you import existing AWS projects, or individual resources into your websites project.
 
-Arjan deploy also helps you import existing sites into your CloudFromation stack. For example, suppose you had previously created a public bucket and a hosted zone for yourdomain.com. Now you decide you want to add a CDN with HTTPS to your site. When you run the updateStack command, arjan will automatically find these resources and import them into your Cloudformation template which will also contain the certificate and the Cloudfront distribution.
-In general, it’s better practice to use Cloudformation template when you have a project that requires various pieces of infrastructure that depend or interact with one another. It just makes your project easier to keep track of and maintain.
-
-
 ## Why not just use the AWS SDK for JS and CloudFormation directly?
 
 It turns out things get a bit trickier than expected when throwing in a CDN with HTTPS into the equation. As of now, to host a static site with HTTPS in AWS it requires more than one template and/or the use of multiple operations in the SDK.
