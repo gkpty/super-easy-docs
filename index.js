@@ -23,10 +23,10 @@ module.exports = function CreateDocs(path, callback){
                 <html lang="en">
                   ${createHead()}
                 <body id="page-top">
+                ${createNav()}
                   <div class="d-lg-flex" id="wrapper">
                     ${createIndex()}
                     <div id="page-content-wrapper">
-                      ${createNav()}
                       <div class="container docs">
                         ${htmlbody}
                         </section>
@@ -82,7 +82,7 @@ function createHead(){
 
 function createNav(){
   let nav = `
-  <nav class="navbar navbar-light bg-light fixed-top py-3">
+  <nav class="navbar navbar-light bg-light py-3">
     <a class="navbar-brand" href="#page-top">Docs</a>
   </nav>
   `;
@@ -110,5 +110,5 @@ var footer = `
 var scripts = `
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-<script src="docs.js"></script>
+<script src="js/docs.js"></script>
 `;
