@@ -93,7 +93,7 @@ function createNav(){
 }
 
 var footer = `
-<footer class="bg-dark sticky-bottom text-center text-white py-4">
+<footer class="bg-light sticky-bottom text-center text-white py-4">
   <div class="container">
     <div class="row">
       <div class="col-sm-6">
